@@ -1,0 +1,27 @@
+{
+  "name": "feedbackdapp",
+  "version": "1.0.0",
+  "description": "A feedback DApp that allows users to connect their wallet",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VicTorQuest/feedbackDApp.git"
+  },
+  "author": "Victor Okolie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VicTorQuest/feedbackDApp/issues"
+  },
+  "homepage": "https://github.com/VicTorQuest/feedbackDApp#readme",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "dotenv": "^16.4.7",
+    "hardhat": "^2.22.19"
+  },
+  "dependencies": {
+    "@metamask/detect-provider": "^2.0.0"
+  }
+}
