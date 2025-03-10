@@ -2,6 +2,9 @@
 
 A decentralized application (DApp) that allows users to submit and view feedback on the blockchain. Built with Solidity, Hardhat, Ethers.js, and deployed on the Sepolia testnet.
 
+## Live Demo
+🔗 [Feedback DApp](https://feedback-dapp-jet.vercel.app)
+
 ## Features
 - Users can submit feedback on the blockchain.
 - Feedback is stored in a smart contract and retrieved in real-time.
