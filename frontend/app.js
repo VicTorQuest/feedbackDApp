@@ -4,14 +4,19 @@ const feedbackInput = document.getElementById("feedbackInput");
 const feedbackList = document.getElementById("feedbackList");
 const submitFeedbackBtn = document.getElementById("submitFeedback")
 
-let contract;
 const contractAddress = '0x1AC732966e3F9293E13FA46b6Cfe141Ce99933C4'
-const contractABI = [ /* ABI from artifacts/Feedback.json */ ];
+let contract;
+let contractABI;
 
-console.log(window.ethereum)
+async function loadABI() {
+    const response = await fetch('./artifacts/contracts/Feedback.sol/Feedback.json');
+    const data = await response.json();
+    contractABI = data.abi; // Assign ABI globally
+    console.log("Loaded ABI:", contractABI);
+}
 
 async function connectWallet() {
-    const provider = await window.detectEthereumProvider(); // No import needed
+    const provider = await window.detectEthereumProvider(); 
 
     if (provider) {
         console.log("MetaMask detected!");
@@ -21,6 +26,7 @@ async function connectWallet() {
         connectedWallet.innerText = await signer.getAddress();
 
         contract = new ethers.Contract(contractAddress, contractABI, signer);
+        console.log(contract)
         loadFeedback();
 
     } else {
@@ -30,6 +36,11 @@ async function connectWallet() {
 
 
 async function submitFeedback() { 
+    submitFeedbackBtn.innerHTML = `<div class="spinner-border spinner-border-sm" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
+`
+submitFeedbackBtn.disabled = true
     const message = feedbackInput.value; 
     if (!message) return; 
     const tx = await contract.submitFeedback(message); 
@@ -40,18 +51,29 @@ async function submitFeedback() {
 
 
 async function loadFeedback() {
-  if (!contract) return;
+  if (!contract) {
+    submitFeedbackBtn.innerHTML = ""
+    submitFeedbackBtn.innerText = "Submit"
+    submitFeedbackBtn.disabled = false
+    return
+  } ;
+  console.log('Contract exist')
   const feedbacks = await contract.getAllFeedback();
+  console.log(feedbacks)
   feedbackList.innerHTML = "";
   feedbacks.forEach((fb) => {
     const item = document.createElement("li");
     item.innerText = `${fb.user}: ${fb.message} (At ${new Date(
-      fb.timestamp * 1000
+     Number(fb.timestamp) * 1000
     ).toLocaleString()})`;
     feedbackList.appendChild(item);
   });
+  submitFeedbackBtn.innerHTML = ""
+  submitFeedbackBtn.innerText = "Submit"
+  submitFeedbackBtn.disabled = false
 }
 
 
 connectBtn.addEventListener("click", connectWallet);
 submitFeedbackBtn.addEventListener("click", submitFeedback);
+loadABI();
